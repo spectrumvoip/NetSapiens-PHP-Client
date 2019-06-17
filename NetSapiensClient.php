@@ -45,27 +45,11 @@ class NetSapiensClient
     protected $hostname;
 
     /**
-     * @param string $clientId
-     * @param string $secret
-     * @param string $username
-     * @param string $password
+     * @param string $hostname
      */
-    public function __construct($hostname, $clientId, $secret, $username, $password)
+    public function __construct($hostname)
     {
-        //Login
         $this->hostname = $hostname;
-        $data = $this->login($clientId, $secret, $username, $password);
-        if (!property_exists($data, 'access_token')) {
-            throw new \Exception('NetSapiens client failed to sign in.');
-            $this->hostname = null;
-        } else {
-            $this->accessToken = $data->access_token;
-            $this->scope = $data->scope;
-            $this->token_type = $data->token_type;
-            $this->refreshToken = $data->refresh_token;
-            $this->legacy = $data->legacy;
-            $this->apiVersion = $data->apiversion;
-        }
     }
 
     /**
@@ -87,9 +71,25 @@ class NetSapiensClient
         ];
 
         $header = array();
-        $url = 'https://' . $this->hostname . '/ns-api/oauth2/token/';
+        if ($this->hostname === "localhost")
+        {
+            $url = 'localhost/ns-api/oauth2/token';
+        } else {
+            $url = 'https://' . $this->hostname . '/ns-api/oauth2/token/';
+        }
         $response = $this->curl_post($url, $header, $parameters);
-        return json_decode($response);
+
+        if (!property_exists($response, 'access_token')) {
+            throw new \Exception('NetSapiens client failed to sign in.');
+            $this->hostname = null;
+        } else {
+            $this->accessToken = $data->access_token;
+            $this->scope = $data->scope;
+            $this->token_type = $data->token_type;
+            $this->refreshToken = $data->refresh_token;
+            $this->legacy = $data->legacy;
+            $this->apiVersion = $data->apiversion;
+        }
     }
 
     /**
@@ -119,29 +119,55 @@ class NetSapiensClient
     /**
      * @return string
      */
+    public function accessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * @return string
+     */
     public function domain()
     {
         return $this->domain;
     }
 
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+    }
+
+    public function setApiVersion($apiVersion)
+    {
+        $this->apiVersion = $apiVersion;
+    }
+
     /**
-     * @param string $url
      * @param array $params
      *
      * @return Object
      */
-    public function ns_api_get($params) {
+    public function ns_api_get(array $params) {
 
         $header = array();
         $header[] = "Authorization: Bearer " . $this->accessToken;
 
-        $url = 'https://' . $this->hostname . '/ns-api/';
+        if ($this->hostname === "localhost")
+        {
+            $url = 'localhost/ns-api/';
+        } else {
+            $url = 'https://' . $this->hostname . '/ns-api/';
+        }
         $response = $this->curl_get($url.'?'.http_build_query($params), $header);
         return json_decode($response, true);
     }
 
     /**
-     * @param string $url
      * @param array $params
      *
      * @return Object
@@ -151,7 +177,12 @@ class NetSapiensClient
         $header = array();
         $header[] = "Authorization: Bearer " . $this->accessToken;
 
-        $url = 'https://' . $this->hostname . '/ns-api/';
+        if ($this->hostname === "localhost")
+        {
+            $url = 'localhost/ns-api/';
+        } else {
+            $url = 'https://' . $this->hostname . '/ns-api/';
+        }
         $response = $this->curl_post($url, $header, $params);
         return json_decode($response, true);
     }

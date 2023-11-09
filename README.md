@@ -17,5 +17,5 @@ You may have to add the following to your composer.json
 ```
 require 'vendor/autoload.php';
 
-$nsclient = new \spectrumvoip\NetSapiensClient\NetSapiensClient($options['nshostname']);
+$nsclient = new \spectrumvoip\NetSapiensClient\NetSapiensClient('localhost');
 ```

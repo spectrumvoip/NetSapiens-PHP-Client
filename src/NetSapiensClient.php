@@ -1,5 +1,5 @@
 <?php
-namespace spectrumvoip;
+namespace spectrumvoip\NetSapiensClient;
 
 class NetSapiensClient
 {

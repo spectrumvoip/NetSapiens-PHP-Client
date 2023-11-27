@@ -1,3 +1,6 @@
+# About
+
+This client is compatible with the NetSapiens V1 API only.
 
 # Installation
 

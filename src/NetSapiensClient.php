@@ -49,11 +49,6 @@ class NetSapiensClient
     /**
      * @var string
      */
-    protected $domain;
-
-    /**
-     * @var string
-     */
     protected $apiVersion;
 
     /**
@@ -156,14 +151,20 @@ class NetSapiensClient
     /**
      * @return string
      */
-    public function domain()
+    public function refreshToken()
     {
-        return $this->domain;
+        return $this->refreshToken;
     }
+
 
     public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
+    }
+
+    public function setRefreshToken($refreshToken)
+    {
+        $this->refreshToken = $refreshToken;
     }
 
     public function setScope($scope)
@@ -171,9 +172,24 @@ class NetSapiensClient
         $this->scope = $scope;
     }
 
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    }
+
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
     public function setApiVersion($apiVersion)
     {
         $this->apiVersion = $apiVersion;
+    }
+
+    public function setTokenExpiry($tokenExpiry)
+    {
+        $this->tokenExpiry = $tokenExpiry;
     }
 
     public function check_expiry()

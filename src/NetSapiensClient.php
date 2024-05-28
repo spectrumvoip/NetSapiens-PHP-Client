@@ -1,4 +1,5 @@
 <?php
+
 namespace spectrumvoip\NetSapiensClient;
 
 class NetSapiensClient
@@ -91,6 +92,8 @@ class NetSapiensClient
             throw new \Exception('NetSapiens client failed to sign in.');
         }
 
+        $this->clientId = $clientId;
+        $this->clientSecret = $secret;
         $this->accessToken = $data->access_token;
         $this->refreshToken = $data->refresh_token;
         $this->scope = $data->scope;
@@ -213,7 +216,7 @@ class NetSapiensClient
         if (!$this->check_expiry()) {
             $this->refresh_token();
         }
-    
+
         $header = array();
         $header[] = "Authorization: Bearer " . $this->accessToken;
 
@@ -232,7 +235,7 @@ class NetSapiensClient
         if (!$this->check_expiry()) {
             $this->refresh_token();
         }
-    
+
         $header = array();
         $header[] = "Authorization: Bearer " . $this->accessToken;
 
@@ -273,6 +276,28 @@ class NetSapiensClient
 
         $url = $this->getApiUrl('/ns-api/oauth2/token');
         $response = $this->curl_get($url.'?'.http_build_query($params), $header);
+        return json_decode($response, true);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $access_token
+     *
+     * @return Object
+     */
+    public function masquerade_token($uid, $access_token)
+    {
+        $params = [];
+        $params['grant_type'] = 'masquerade';
+        $params['client_id'] = $this->clientId;
+        $params['client_secret'] = $this->clientSecret;
+        $params['mask_uid'] = $uid;
+        $params['access_token'] = $access_token;
+
+        $header = array();
+
+        $url = $this->getApiUrl('/ns-api/oauth2/token');
+        $response = $this->curl_post($url, $header, $params);
         return json_decode($response, true);
     }
 

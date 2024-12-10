@@ -1,5 +1,13 @@
 # NetSapiens PHP Client Documentation
 
+## Maintenance Mode Notice
+
+This repository is now in maintenance mode as the API has been upgraded to version 2. All future development efforts are focused on the v2 client, and support for v1 will be discontinued. 
+
+- If you're using the v1 API, we recommend migrating to the [v2 client](https://github.com/spectrumvoip/netsapiens-openapi-php).
+
+Thank you for your understanding.
+
 ## About
 
 This PHP client is designed to interact with the NetSapiens V1 API. It provides a convenient way to authenticate and make API calls to NetSapiens services.
